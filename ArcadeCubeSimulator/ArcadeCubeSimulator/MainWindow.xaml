@@ -1,0 +1,48 @@
+﻿<Window x:Class="ArcadeCubeSimulator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArcadeCubeSimulator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <ListView ItemsSource="{Binding LedPlanes}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ListView ItemsSource="{Binding LedRows}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ListView ItemsSource="{Binding Leds}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Rectangle Fill="{Binding Color}" Height="10" Width="10"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                </ListView>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>   
+                 </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+        <StackPanel Grid.Row="1">
+            <Button Content="Send" Click="Button_Click" />
+        </StackPanel>
+        
+    </Grid>
+</Window>
