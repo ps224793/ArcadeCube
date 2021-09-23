@@ -19,7 +19,7 @@ namespace ArcadeCubeSimulator.classes
             set { _body = value; }
         }
 
-        public Direction MyDirection { get; set; } = Direction.NegetiveX;
+        public Direction MyDirection { get; set; } = Direction.PositiveX;
 
         public Snake(List<Led> startBody)
         {

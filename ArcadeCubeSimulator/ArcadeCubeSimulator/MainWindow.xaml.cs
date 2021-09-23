@@ -1,7 +1,10 @@
 ﻿using ArcadeCubeSimulator.classes;
+using ArcadeCubeSimulator.enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,6 +28,7 @@ namespace ArcadeCubeSimulator
 
         private SnakeGame snakeGame;
 
+
         public LedCube MyLedCube
         {
             get { return _ledCube; }
@@ -42,6 +46,11 @@ namespace ArcadeCubeSimulator
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             byte[] array  = MyLedCube.Value;
+        }
+
+        private void MovesetSnake(object sender, KeyEventArgs e)
+        {
+            snakeGame.Snakekey(sender, e);
         }
     }
 }
