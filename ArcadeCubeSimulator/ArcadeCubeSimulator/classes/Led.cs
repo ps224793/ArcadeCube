@@ -21,7 +21,7 @@ namespace ArcadeCubeSimulator.classes
                     case 1:
                         return Brushes.Red;
                     case 2:
-                        return Brushes.Green;
+                        return Brushes.LimeGreen;
                     case 3:
                         return Brushes.Blue;
                     case 4:
