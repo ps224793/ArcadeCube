@@ -23,13 +23,14 @@ namespace ArcadeCubeSimulator.classes
 
         DispatcherTimer _turnTimer = new DispatcherTimer()
         {
-            Interval = TimeSpan.FromSeconds(1)
+            Interval = TimeSpan.FromMilliseconds(500)
         };
 
         public SnakeGame(LedCube ledCube)
         {
             MyLedCube = ledCube;
             Setup();
+            _turnTimer.Tick += _turnTimer_Tick;
         }
 
         private void Setup()
@@ -47,13 +48,9 @@ namespace ArcadeCubeSimulator.classes
 
             List<Led> leds = new List<Led>();
             leds.Add(MyLedCube.LedPlanes[0].LedRows[0].Leds[0]);
-            leds.Add(MyLedCube.LedPlanes[0].LedRows[0].Leds[0]);
-            leds.Add(MyLedCube.LedPlanes[0].LedRows[0].Leds[0]);
             _snake = new Snake(leds);
 
             SpawnFood();
-
-            _turnTimer.Tick += _turnTimer_Tick;
             _turnTimer.Start();
         }
 
@@ -94,6 +91,7 @@ namespace ArcadeCubeSimulator.classes
 
             if (CollisionSnake())
             {
+                _turnTimer.Stop();
                 Setup();
             }
             else if (_snake.MyBody[_snake.MyBody.Count - 1] == _food)
@@ -106,30 +104,34 @@ namespace ArcadeCubeSimulator.classes
                 _snake.MyBody.Add(_snakeHeading);
                 _snake.MyBody[0].Value = 0;
                 _snake.MyBody.RemoveAt(0);
-                /*                _snake.Head[1]++;*/
-                switch (_snake.MyDirection) 
-                {
-                    case Direction.PositiveX:
-                        _snake.Head[2]++;
-                        break;
-                    case Direction.NegetiveX:
-                        _snake.Head[2]--;
-                        break;
-                    case Direction.PositiveY:
-                        _snake.Head[1]++;
-                        break;
-                    case Direction.NegativeY:
-                        _snake.Head[1]--;
-                        break;
-                    case Direction.PositiveZ:
-                        _snake.Head[0]++;
-                        break;
-                    case Direction.NegativeZ:
-                        _snake.Head[0]--;
-                        break;
-                    default:
-                        break;
-                }
+                MoveHead();
+            }
+        }
+
+        private void MoveHead()
+        {
+            switch (_snake.MyDirection)
+            {
+                case Direction.PositiveX:
+                    _snake.Head[2]++;
+                    break;
+                case Direction.NegetiveX:
+                    _snake.Head[2]--;
+                    break;
+                case Direction.PositiveY:
+                    _snake.Head[1]++;
+                    break;
+                case Direction.NegativeY:
+                    _snake.Head[1]--;
+                    break;
+                case Direction.PositiveZ:
+                    _snake.Head[0]++;
+                    break;
+                case Direction.NegativeZ:
+                    _snake.Head[0]--;
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -138,26 +140,45 @@ namespace ArcadeCubeSimulator.classes
             switch (e.Key)
             {
                 case Key.W:
-                    _snake.MyDirection = Direction.NegativeY;
+                    if (_snake.MyDirection != Direction.PositiveY)
+                    {
+                        _snake.MyDirection = Direction.NegativeY;
+                    }
                     break;
                 case Key.A:
-                    _snake.MyDirection = Direction.NegetiveX;
+                    if (_snake.MyDirection != Direction.PositiveX)
+                    {
+                        _snake.MyDirection = Direction.NegetiveX;
+                    }
                     break;
                 case Key.S:
-                    _snake.MyDirection = Direction.PositiveY;
+                    if (_snake.MyDirection != Direction.NegativeY)
+                    {
+                        _snake.MyDirection = Direction.PositiveY;
+                    }
                     break;
                 case Key.D:
-                    _snake.MyDirection = Direction.PositiveX;
+                    if (_snake.MyDirection != Direction.NegetiveX)
+                    {
+                        _snake.MyDirection = Direction.PositiveX;
+                    }
                     break;
                 case Key.E:
-                    _snake.MyDirection = Direction.PositiveZ;
+                    if (_snake.MyDirection != Direction.NegativeZ)
+                    {
+                        _snake.MyDirection = Direction.PositiveZ;
+                    }
                     break;
                 case Key.Q:
-                    _snake.MyDirection = Direction.NegativeZ;
+                    if (_snake.MyDirection != Direction.PositiveZ)
+                    {
+                        _snake.MyDirection = Direction.NegativeZ;
+                    }
                     break;
                 default:
                     break;
             }
+
         }
 
         private bool CollisionSnake()
@@ -174,8 +195,10 @@ namespace ArcadeCubeSimulator.classes
 
         private void EatFood()
         {
-            _snake.MyBody.Add(_snakeHeading);
             _snakeHeading.Value = 2;
+            _snake.MyBody.Add(_snakeHeading);
+            
+            MoveHead();
             SpawnFood();
         }
 
@@ -184,34 +207,22 @@ namespace ArcadeCubeSimulator.classes
             switch (_snake.MyDirection)
             {
                 case Direction.PositiveX:
-                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0]].LedRows[_snake.Head[1]].Leds[(_snake.Head[2] + 1) % 5];
+                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0] % 5].LedRows[_snake.Head[1] % 5].Leds[(_snake.Head[2] + 1) % 5];
                     break;
                 case Direction.NegetiveX:
-                    if (_snake.Head[2] == 0)
-                    {
-                        _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0]].LedRows[_snake.Head[1]].Leds[_snake.Head[2] = 4];
-                    }
-                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0]].LedRows[_snake.Head[1]].Leds[_snake.Head[2] - 1];
+                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0] % 5].LedRows[_snake.Head[1] % 5].Leds[(_snake.Head[2] - 1) % 5];
                     break;
                 case Direction.PositiveY:
-                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0]].LedRows[(_snake.Head[1] + 1) % 5].Leds[_snake.Head[2]];
+                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0] % 5].LedRows[(_snake.Head[1] + 1) % 5].Leds[_snake.Head[2] % 5];
                     break;
                 case Direction.NegativeY:
-                    if (_snake.Head[1] == 0)
-                    {
-                        _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0]].LedRows[_snake.Head[1] = 4].Leds[_snake.Head[2]];
-                    }
-                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0]].LedRows[_snake.Head[1] - 1].Leds[_snake.Head[2]];
+                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0] % 5].LedRows[(_snake.Head[1] - 1) % 5].Leds[_snake.Head[2] % 5];
                     break;
                 case Direction.PositiveZ:
-                    _snakeHeading = MyLedCube.LedPlanes[(_snake.Head[0] + 1) % 5].LedRows[_snake.Head[1]].Leds[_snake.Head[2]];
+                    _snakeHeading = MyLedCube.LedPlanes[(_snake.Head[0] + 1) % 5].LedRows[_snake.Head[1] % 5].Leds[_snake.Head[2] % 5];
                     break;
                 case Direction.NegativeZ:
-                    if (_snake.Head[0] == 0)
-                    {
-                        _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0] = 4].LedRows[_snake.Head[1]].Leds[_snake.Head[2]];
-                    }
-                    _snakeHeading = MyLedCube.LedPlanes[_snake.Head[0] - 1].LedRows[_snake.Head[1]].Leds[_snake.Head[2]];
+                    _snakeHeading = MyLedCube.LedPlanes[(_snake.Head[0] - 1) % 5].LedRows[_snake.Head[1] % 5].Leds[_snake.Head[2] % 5];
                     break;
                 default:
                     break;

@@ -19,7 +19,7 @@ namespace ArcadeCubeSimulator.classes
             set { _body = value; }
         }
 
-        public Direction MyDirection { get; set; } = Direction.PositiveX;
+        public Direction MyDirection { get; set; } = Direction.NegetiveX;
 
         public Snake(List<Led> startBody)
         {
@@ -30,9 +30,9 @@ namespace ArcadeCubeSimulator.classes
             }
 
             Head = new int[3];
-            Head[0] = 0;
-            Head[1] = 0;
-            Head[2] = 0;
+            Head[0] = 500000; // let vooral niet op het grote getal
+            Head[1] = 500000;
+            Head[2] = 500000;
         }
     }
 }
