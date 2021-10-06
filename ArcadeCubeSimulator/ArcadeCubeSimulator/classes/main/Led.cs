@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace ArcadeCubeSimulator.classes
+namespace ArcadeCubeSimulator.classes.main
 {
     public class Led: PropertyChange
     {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
 
         public Brush Color
         {
@@ -45,6 +48,11 @@ namespace ArcadeCubeSimulator.classes
             set { _value = value; OnPropertyChanged("Color"); }
         }
 
-
+        public Led(int x, int y, int z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
     }
 }

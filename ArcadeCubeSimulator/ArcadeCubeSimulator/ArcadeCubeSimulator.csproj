@@ -63,13 +63,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="classes\LedCube.cs" />
-    <Compile Include="classes\LedPlane.cs" />
-    <Compile Include="classes\Led.cs" />
-    <Compile Include="classes\LedRow.cs" />
-    <Compile Include="classes\PropertyChange.cs" />
-    <Compile Include="classes\Snake.cs" />
-    <Compile Include="classes\SnakeGame.cs" />
+    <Compile Include="classes\anvildrop\Anvil.cs" />
+    <Compile Include="classes\anvildrop\Anvildrop.cs" />
+    <Compile Include="classes\anvildrop\AnvildropPlayer.cs" />
+    <Compile Include="classes\main\LedCube.cs" />
+    <Compile Include="classes\main\LedPlane.cs" />
+    <Compile Include="classes\main\Led.cs" />
+    <Compile Include="classes\main\LedRow.cs" />
+    <Compile Include="classes\main\PropertyChange.cs" />
+    <Compile Include="classes\Snake\Snake.cs" />
+    <Compile Include="classes\Snake\SnakeGame.cs" />
     <Compile Include="enums\Direction.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

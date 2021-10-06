@@ -16,6 +16,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ArcadeCubeSimulator.classes.main;
+using ArcadeCubeSimulator.classes.Snake;
+using ArcadeCubeSimulator.classes.anvildrop;
 
 namespace ArcadeCubeSimulator
 {
@@ -25,7 +28,7 @@ namespace ArcadeCubeSimulator
     public partial class MainWindow : Window
     {
         private LedCube _ledCube = new LedCube();
-
+        private Anvildrop _anvildrop;
         private SnakeGame snakeGame;
 
 
@@ -40,7 +43,15 @@ namespace ArcadeCubeSimulator
             DataContext = MyLedCube;
             InitializeComponent();
 
-            snakeGame = new SnakeGame(_ledCube);
+            
+        }
+        private void MovesetSnake(object sender, KeyEventArgs e)
+        {
+            if(snakeGame != null)
+            {
+                snakeGame.Snakekey(sender, e);
+            }
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -48,9 +59,24 @@ namespace ArcadeCubeSimulator
             byte[] array  = MyLedCube.Value;
         }
 
-        private void MovesetSnake(object sender, KeyEventArgs e)
+        private void Snake_Click(object sender, RoutedEventArgs e)
         {
-            snakeGame.Snakekey(sender, e);
+            if (snakeGame != null)
+            {
+                snakeGame._turnTimer.Stop();
+            }
+            _anvildrop = null;
+            snakeGame = new SnakeGame(_ledCube);
+        }
+
+        private void Anvil_Click(object sender, RoutedEventArgs e)
+        {
+            if (snakeGame != null)
+            {
+                snakeGame._turnTimer.Stop();
+            }
+            snakeGame = null;
+            _anvildrop = new Anvildrop(_ledCube, new Random());
         }
     }
 }

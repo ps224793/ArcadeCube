@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ArcadeCubeSimulator.enums;
+using ArcadeCubeSimulator.classes.main;
 
-namespace ArcadeCubeSimulator.classes
+namespace ArcadeCubeSimulator.classes.Snake
 {
     class SnakeGame
     {
@@ -21,7 +22,7 @@ namespace ArcadeCubeSimulator.classes
 
         private Led _snakeHeading;
 
-        DispatcherTimer _turnTimer = new DispatcherTimer()
+        public DispatcherTimer _turnTimer = new DispatcherTimer()
         {
             Interval = TimeSpan.FromMilliseconds(500)
         };

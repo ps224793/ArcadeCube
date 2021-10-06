@@ -42,7 +42,8 @@
         </ListView>
         <StackPanel Grid.Row="1">
             <Button Content="Send" Click="Button_Click" />
+            <Button Content="snake" Click="Snake_Click" />
+            <Button Content="Anvildrop" Click="Anvil_Click" />
         </StackPanel>
-        
     </Grid>
 </Window>
