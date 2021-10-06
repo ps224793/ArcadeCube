@@ -5,11 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArcadeCubeSimulator.classes
+namespace ArcadeCubeSimulator.classes.main
 {
     public class LedRow
     {
+
         public const int NrOfLeds = 5;
+        private int _planeCordiante;
+        private int _rowCordinate;
 
         private ObservableCollection<Led> _leds= new ObservableCollection<Led>();
 
@@ -32,12 +35,14 @@ namespace ArcadeCubeSimulator.classes
             }
         }
 
-        public LedRow()
+        public LedRow(int planeCordinate, int rowCordinate)
         {
+            _planeCordiante = planeCordinate;
+            _rowCordinate = rowCordinate;
             for (int i = 0; i < NrOfLeds; i++)
             {
                 _leds.Add(
-                    new Led()
+                    new Led(_planeCordiante,_rowCordinate,i)// add Location
                     {
                         Value = 0
                     }

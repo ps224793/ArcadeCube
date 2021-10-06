@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArcadeCubeSimulator.classes
+namespace ArcadeCubeSimulator.classes.main
 {
     public class LedCube
     {
@@ -35,7 +35,7 @@ namespace ArcadeCubeSimulator.classes
         {
             for (int i = 0; i < NrOfLedPlanes; i++)
             {
-                _ledPlanes.Add(new LedPlane());
+                _ledPlanes.Add(new LedPlane(i));
             }
         }
     }

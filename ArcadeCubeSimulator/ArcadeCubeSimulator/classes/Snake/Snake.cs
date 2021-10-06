@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArcadeCubeSimulator.enums;
+using ArcadeCubeSimulator.classes.main;
 
-namespace ArcadeCubeSimulator.classes
+namespace ArcadeCubeSimulator.classes.Snake
 {
     public class Snake
     {
@@ -19,7 +20,7 @@ namespace ArcadeCubeSimulator.classes
             set { _body = value; }
         }
 
-        public Direction MyDirection { get; set; } = Direction.NegetiveX;
+        public Direction MyDirection { get; set; } = Direction.PositiveX;
 
         public Snake(List<Led> startBody)
         {
@@ -30,7 +31,7 @@ namespace ArcadeCubeSimulator.classes
             }
 
             Head = new int[3];
-            Head[0] = 500000; // let vooral niet op het grote getal
+            Head[0] = 500000;
             Head[1] = 500000;
             Head[2] = 500000;
         }
