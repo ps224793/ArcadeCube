@@ -53,7 +53,39 @@ namespace ArcadeCubeSimulator.classes.anvildrop
             Led spawnLed = AnvilSpawns[_random.Next(0,AnvilSpawns.Count)];
             Anvil anvil = new Anvil(spawnLed.X, spawnLed.Y, spawnLed.Z);
             spawnLed.Value = 1;
+            _anvils.Add(anvil);
         }
         
+        public void DropAnvils()
+        {
+            List<Anvil> anvilsToDelete = new List<Anvil>();
+            foreach(Anvil anvil in _anvils)
+            {
+                if(anvil.X == 4)
+                {
+                    anvilsToDelete.Add(anvil);
+                }
+                else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 1)
+                {
+                    anvilsToDelete.Add(anvil);
+                }
+                else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 3)
+                {
+                    // game over
+                }
+                else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 0)
+                {
+                    _ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value = 1;
+                    _ledCube.LedPlanes[anvil.X].LedRows[anvil.Y].Leds[anvil.Z].Value = 0;
+                    anvil.X++;
+                }
+            }
+            foreach(Anvil anvil in anvilsToDelete)
+            {
+                _anvils.Remove(anvil);
+                CreateAnvil();
+            }
+
+        }
     }
 }
