@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using ArcadeCubeSimulator.classes.main;
 using ArcadeCubeSimulator.classes.Snake;
 using ArcadeCubeSimulator.classes.anvildrop;
+using System.Windows.Threading;
 
 namespace ArcadeCubeSimulator
 {
@@ -31,6 +32,10 @@ namespace ArcadeCubeSimulator
         private Anvildrop _anvildrop;
         private SnakeGame snakeGame;
 
+        public DispatcherTimer _snakeTimer = new DispatcherTimer()
+        {
+            Interval = TimeSpan.FromMilliseconds(1000)
+        };
 
         public LedCube MyLedCube
         {
@@ -42,9 +47,23 @@ namespace ArcadeCubeSimulator
         {
             DataContext = MyLedCube;
             InitializeComponent();
-
-            
+            _snakeTimer.Tick += _snakeTimer_Tick;
+            _snakeTimer.Start();
         }
+
+
+        private void _snakeTimer_Tick(object sender, EventArgs e)
+        {
+            if(snakeGame != null)
+            {
+                snakeGame.MoveSnake();
+            }
+            if(_anvildrop != null)
+            {
+                _anvildrop.DropAnvils();
+            }
+        }
+
         private void MovesetSnake(object sender, KeyEventArgs e)
         {
             if(snakeGame != null)
@@ -61,20 +80,13 @@ namespace ArcadeCubeSimulator
 
         private void Snake_Click(object sender, RoutedEventArgs e)
         {
-            if (snakeGame != null)
-            {
-                snakeGame._turnTimer.Stop();
-            }
+
             _anvildrop = null;
             snakeGame = new SnakeGame(_ledCube);
         }
 
         private void Anvil_Click(object sender, RoutedEventArgs e)
         {
-            if (snakeGame != null)
-            {
-                snakeGame._turnTimer.Stop();
-            }
             snakeGame = null;
             _anvildrop = new Anvildrop(_ledCube, new Random());
         }

@@ -22,16 +22,12 @@ namespace ArcadeCubeSimulator.classes.Snake
 
         private Led _snakeHeading;
 
-        public DispatcherTimer _turnTimer = new DispatcherTimer()
-        {
-            Interval = TimeSpan.FromMilliseconds(500)
-        };
+        
 
         public SnakeGame(LedCube ledCube)
         {
             MyLedCube = ledCube;
             Setup();
-            _turnTimer.Tick += _turnTimer_Tick;
         }
 
         private void Setup()
@@ -52,13 +48,9 @@ namespace ArcadeCubeSimulator.classes.Snake
             _snake = new Snake(leds);
 
             SpawnFood();
-            _turnTimer.Start();
         }
 
-        private void _turnTimer_Tick(object sender, EventArgs e)
-        {
-            MoveSnake();
-        }
+
 
         private void SpawnFood()
         {
@@ -86,13 +78,12 @@ namespace ArcadeCubeSimulator.classes.Snake
             }
         }
 
-        private void MoveSnake()
+        public void MoveSnake()
         {
             SetSnakeHeading();
 
             if (CollisionSnake())
             {
-                _turnTimer.Stop();
                 Setup();
             }
             else if (_snake.MyBody[_snake.MyBody.Count - 1] == _food)
