@@ -22,8 +22,6 @@ namespace ArcadeCubeSimulator.classes.Snake
 
         private Led _snakeHeading;
 
-        
-
         public SnakeGame(LedCube ledCube)
         {
             MyLedCube = ledCube;
@@ -32,6 +30,7 @@ namespace ArcadeCubeSimulator.classes.Snake
 
         private void Setup()
         {
+            GameTimers.SnakeTimer.Stop();
             foreach (LedPlane plane in MyLedCube.LedPlanes)
             {
                 foreach (LedRow ledRow in plane.LedRows)

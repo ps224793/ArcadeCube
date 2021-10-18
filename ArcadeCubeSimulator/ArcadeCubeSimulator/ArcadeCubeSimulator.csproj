@@ -55,10 +55,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SnakeWindow.xaml.cs">
+      <DependentUpon>SnakeWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AnvildropWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AnvildropWindow.xaml.cs">
+      <DependentUpon>AnvildropWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -66,6 +76,7 @@
     <Compile Include="classes\anvildrop\Anvil.cs" />
     <Compile Include="classes\anvildrop\Anvildrop.cs" />
     <Compile Include="classes\anvildrop\AnvildropPlayer.cs" />
+    <Compile Include="classes\main\GameTimers.cs" />
     <Compile Include="classes\main\LedCube.cs" />
     <Compile Include="classes\main\LedPlane.cs" />
     <Compile Include="classes\main\Led.cs" />
@@ -78,6 +89,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SnakeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

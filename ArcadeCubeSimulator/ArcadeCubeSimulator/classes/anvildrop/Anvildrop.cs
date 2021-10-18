@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArcadeCubeSimulator.classes.main;
+using System.Windows;
+using ArcadeCubeSimulator.enums;
 
 namespace ArcadeCubeSimulator.classes.anvildrop
 {
@@ -13,6 +15,8 @@ namespace ArcadeCubeSimulator.classes.anvildrop
 
         private LedCube _ledCube;
 
+        private AnvildropPlayer _player = new AnvildropPlayer() ;
+
         List<Anvil> _anvils = new List<Anvil>();
 
         public Anvildrop(LedCube ledCube, Random random)
@@ -20,6 +24,7 @@ namespace ArcadeCubeSimulator.classes.anvildrop
             _ledCube = ledCube;
             _random = random;
             ClearCube();
+            SpawnPlayer();
             CreateAnvil();
         }
 
@@ -58,34 +63,94 @@ namespace ArcadeCubeSimulator.classes.anvildrop
         
         public void DropAnvils()
         {
-            List<Anvil> anvilsToDelete = new List<Anvil>();
-            foreach(Anvil anvil in _anvils)
+            try
             {
-                if(anvil.X == 4)
+                List<Anvil> anvilsToDelete = new List<Anvil>();
+                foreach (Anvil anvil in _anvils)
                 {
-                    anvilsToDelete.Add(anvil);
+                    if (anvil.X == 4)
+                    {
+                        anvilsToDelete.Add(anvil);
+                    }
+                    else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 1)
+                    {
+                        anvilsToDelete.Add(anvil);
+                    }
+                    else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 3)
+                    {
+                        MessageBox.Show("je hebt verloren");
+                        ResetGame();
+                    }
+                    else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 0)
+                    {
+                        _ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value = 1;
+                        _ledCube.LedPlanes[anvil.X].LedRows[anvil.Y].Leds[anvil.Z].Value = 0;
+                        anvil.X++;
+                    }
                 }
-                else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 1)
+                foreach (Anvil anvil in anvilsToDelete)
                 {
-                    anvilsToDelete.Add(anvil);
-                }
-                else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 3)
-                {
-                    // game over
-                }
-                else if (_ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value == 0)
-                {
-                    _ledCube.LedPlanes[anvil.X + 1].LedRows[anvil.Y].Leds[anvil.Z].Value = 1;
-                    _ledCube.LedPlanes[anvil.X].LedRows[anvil.Y].Leds[anvil.Z].Value = 0;
-                    anvil.X++;
+                    _anvils.Remove(anvil);
+                    CreateAnvil();
                 }
             }
-            foreach(Anvil anvil in anvilsToDelete)
+            catch(Exception e)
             {
-                _anvils.Remove(anvil);
-                CreateAnvil();
+                
             }
 
+        }
+
+        private void ResetGame()
+        {
+            GameTimers.AnvildropTimer.Stop();
+            ClearCube();
+            SpawnPlayer();
+            CreateAnvil();
+        }
+
+        private void SpawnPlayer()
+        {
+            Led led = _ledCube.LedPlanes[4].LedRows[_random.Next(0, 5)].Leds[_random.Next(0, 5)];
+            led.Value = 3;
+            _player.X = 4;
+            _player.Y = led.Y;
+            _player.Z = led.Z;
+        }
+        
+        public void MovePlayer(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.PositiveY:
+                    if (_player.Y <= 3)
+                    {
+                        if (_ledCube.LedPlanes[_player.X].LedRows[_player.Y+1].Leds[_player.Z].Value == 1)
+                        {
+                            if (_ledCube.LedPlanes[_player.X + 1].LedRows[_player.Y + 1].Leds[_player.Z].Value == 0 && _ledCube.LedPlanes[_player.X + 1].LedRows[_player.Y].Leds[_player.Z].Value == 0)
+                            {
+                                _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                                _ledCube.LedPlanes[_player.X].LedRows[_player.Y + 1].Leds[_player.Z].Value = 3;
+                                _player.Y++;
+                            }
+                        }
+                        else
+                        {
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y + 1].Leds[_player.Z].Value = 3;
+                            _player.Y++;
+                        }
+                    }
+                    break;
+                case Direction.NegativeY:
+                    break;
+                case Direction.PositiveZ:
+                    break;
+                case Direction.NegativeZ:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
