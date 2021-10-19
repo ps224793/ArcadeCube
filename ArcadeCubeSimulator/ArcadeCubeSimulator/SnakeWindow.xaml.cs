@@ -44,10 +44,7 @@ namespace ArcadeCubeSimulator
 
         private void MovesetSnake(object sender, KeyEventArgs e)
         {
-            if (_snakeGame != null)
-            {
-                _snakeGame.Snakekey(sender, e);
-            }
+            _snakeGame.Snakekey(sender, e);
         }
 
         private void Start_CLick(object sender, RoutedEventArgs e)
