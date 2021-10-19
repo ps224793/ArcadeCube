@@ -28,67 +28,25 @@ namespace ArcadeCubeSimulator
     /// </summary>
     public partial class MainWindow : Window
     {
-        private LedCube _ledCube = new LedCube();
-        private Anvildrop _anvildrop;
-        private SnakeGame snakeGame;
-
-        public DispatcherTimer _snakeTimer = new DispatcherTimer()
-        {
-            Interval = TimeSpan.FromMilliseconds(1000)
-        };
-
-        public LedCube MyLedCube
-        {
-            get { return _ledCube; }
-            set { _ledCube = value; }
-        }
-
         public MainWindow()
         {
-            DataContext = MyLedCube;
             InitializeComponent();
-            _snakeTimer.Tick += _snakeTimer_Tick;
-            _snakeTimer.Start();
-        }
-
-
-        private void _snakeTimer_Tick(object sender, EventArgs e)
-        {
-            if(snakeGame != null)
-            {
-                snakeGame.MoveSnake();
-            }
-            if(_anvildrop != null)
-            {
-                _anvildrop.DropAnvils();
-            }
-        }
-
-        private void MovesetSnake(object sender, KeyEventArgs e)
-        {
-            if(snakeGame != null)
-            {
-                snakeGame.Snakekey(sender, e);
-            }
-            
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            byte[] array  = MyLedCube.Value;
         }
 
         private void Snake_Click(object sender, RoutedEventArgs e)
         {
-
-            _anvildrop = null;
-            snakeGame = new SnakeGame(_ledCube);
+            SnakeWindow snakeWindow = new SnakeWindow();
+            this.Hide();
+            snakeWindow.ShowDialog();
+            this.Show();
         }
 
         private void Anvil_Click(object sender, RoutedEventArgs e)
         {
-            snakeGame = null;
-            _anvildrop = new Anvildrop(_ledCube, new Random());
+            AnvildropWindow anvildropWindow = new AnvildropWindow();
+            this.Hide();
+            anvildropWindow.ShowDialog();
+            this.Show();
         }
     }
 }
