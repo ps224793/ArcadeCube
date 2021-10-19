@@ -47,7 +47,7 @@ namespace ArcadeCubeSimulator
 
         private void MovePlayer(object sender, KeyEventArgs e)
         {
-            
+            _anvildrop.MovePlayer(sender, e);
         }
     }
 }

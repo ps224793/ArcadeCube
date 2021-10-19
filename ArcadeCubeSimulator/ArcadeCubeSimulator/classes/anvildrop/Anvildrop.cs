@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ArcadeCubeSimulator.classes.main;
 using System.Windows;
 using ArcadeCubeSimulator.enums;
+using System.Windows.Input;
 
 namespace ArcadeCubeSimulator.classes.anvildrop
 {
@@ -59,6 +60,11 @@ namespace ArcadeCubeSimulator.classes.anvildrop
             Anvil anvil = new Anvil(spawnLed.X, spawnLed.Y, spawnLed.Z);
             spawnLed.Value = 1;
             _anvils.Add(anvil);
+            if (anvil.X == _player.X && anvil.Y == _player.Y && anvil.Z == _player.Z)
+            {
+                MessageBox.Show("je hebt verloren");
+                ResetGame();
+            }
         }
         
         public void DropAnvils()
@@ -93,6 +99,7 @@ namespace ArcadeCubeSimulator.classes.anvildrop
                     _anvils.Remove(anvil);
                     CreateAnvil();
                 }
+                DropPlayer();
             }
             catch(Exception e)
             {
@@ -105,6 +112,7 @@ namespace ArcadeCubeSimulator.classes.anvildrop
         {
             GameTimers.AnvildropTimer.Stop();
             ClearCube();
+            _anvils = new List<Anvil>();
             SpawnPlayer();
             CreateAnvil();
         }
@@ -117,21 +125,47 @@ namespace ArcadeCubeSimulator.classes.anvildrop
             _player.Y = led.Y;
             _player.Z = led.Z;
         }
-        
-        public void MovePlayer(Direction direction)
+
+        private void DropPlayer()
         {
-            switch (direction)
+            bool dropped = false;
+            while (dropped == false)
             {
-                case Direction.PositiveY:
-                    if (_player.Y <= 3)
+                if (_player.X < 4)
+                {
+                    if (_ledCube.LedPlanes[_player.X + 1].LedRows[_player.Y].Leds[_player.Z].Value == 0)
+                    {
+                        _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                        _ledCube.LedPlanes[_player.X + 1].LedRows[_player.Y].Leds[_player.Z].Value = 3;
+                        _player.X++;
+                    }
+                    else
+                    {
+                        dropped = true;
+                    }
+                }
+                else
+                {
+                    dropped = true;
+                }
+            }
+        }
+        
+        public void MovePlayer(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.S:
+                    if (_player.Y < 4)
                     {
                         if (_ledCube.LedPlanes[_player.X].LedRows[_player.Y+1].Leds[_player.Z].Value == 1)
                         {
-                            if (_ledCube.LedPlanes[_player.X + 1].LedRows[_player.Y + 1].Leds[_player.Z].Value == 0 && _ledCube.LedPlanes[_player.X + 1].LedRows[_player.Y].Leds[_player.Z].Value == 0)
+                            if (_ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y + 1].Leds[_player.Z].Value == 0 && _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z].Value == 0)
                             {
                                 _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
-                                _ledCube.LedPlanes[_player.X].LedRows[_player.Y + 1].Leds[_player.Z].Value = 3;
+                                _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y + 1].Leds[_player.Z].Value = 3;
                                 _player.Y++;
+                                _player.X--;
                             }
                         }
                         else
@@ -142,15 +176,73 @@ namespace ArcadeCubeSimulator.classes.anvildrop
                         }
                     }
                     break;
-                case Direction.NegativeY:
+                case Key.W:
+                    if (_player.Y > 0)
+                    {
+                        if (_ledCube.LedPlanes[_player.X].LedRows[_player.Y - 1].Leds[_player.Z].Value == 1)
+                        {
+                            if (_ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y - 1].Leds[_player.Z].Value == 0 && _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z].Value == 0)
+                            {
+                                _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                                _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y - 1].Leds[_player.Z].Value = 3;
+                                _player.Y--;
+                                _player.X--;
+                            }
+                        }
+                        else
+                        {
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y - 1].Leds[_player.Z].Value = 3;
+                            _player.Y--;
+                        }
+                    }
                     break;
-                case Direction.PositiveZ:
+                case Key.A:
+                    if (_player.Z > 0)
+                    {
+                        if (_ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z - 1].Value == 1)
+                        {
+                            if (_ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z - 1].Value == 0 && _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z].Value == 0)
+                            {
+                                _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                                _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z - 1].Value = 3;
+                                _player.Z--;
+                                _player.X--;
+                            }
+                        }
+                        else
+                        {
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z - 1].Value = 3;
+                            _player.Z--;
+                        }
+                    }
                     break;
-                case Direction.NegativeZ:
+                case Key.D:
+                    if (_player.Z < 4)
+                    {
+                        if (_ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z + 1].Value == 1)
+                        {
+                            if (_ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z + 1].Value == 0 && _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z].Value == 0)
+                            {
+                                _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                                _ledCube.LedPlanes[_player.X - 1].LedRows[_player.Y].Leds[_player.Z + 1].Value = 3;
+                                _player.Z++;
+                                _player.X--;
+                            }
+                        }
+                        else
+                        {
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z].Value = 0;
+                            _ledCube.LedPlanes[_player.X].LedRows[_player.Y].Leds[_player.Z + 1].Value = 3;
+                            _player.Z++;
+                        }
+                    }
                     break;
                 default:
                     break;
             }
+            DropPlayer();
         }
     }
 }
